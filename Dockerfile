@@ -1,9 +1,10 @@
-FROM nvidia/cuda:12.1.1-runtime-ubuntu22.04
+FROM nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+    PIP_NO_CACHE_DIR=1 \
+    TRANSFORMERS_NO_FLASH_ATTENTION=1
 
 WORKDIR /app
 
@@ -13,9 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN python3 -m pip install --upgrade pip
 
-# CUDA-enabled PyTorch (cu121)
 RUN pip install --no-cache-dir \
-    torch==2.4.1+cu121 torchvision==0.19.1+cu121 \
+    torch==2.5.1+cu121 torchvision==0.20.1+cu121 \
     --index-url https://download.pytorch.org/whl/cu121
 
 COPY requirements.txt /app/requirements.txt
